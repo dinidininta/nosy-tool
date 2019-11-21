@@ -33,6 +33,7 @@
     "ejs": "^2.7.4",
     "express": "^4.17.1",
     "http-error": "0.0.6",
+    "http-status-codes": "^1.4.0",
     "mockdate": "^2.0.5",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
