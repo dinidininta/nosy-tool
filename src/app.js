@@ -9,7 +9,7 @@ const app = express();
 const db = database.connect(config.db);
 
 const createModels = () => ({
-  Feature: SomeFeature.init(db),
+  Feature: SomeFeature.init(db)
 });
 
 const initializeAssociation = (models) => {
@@ -42,10 +42,8 @@ initializeControllers();
 
 app.locals.models = createModels();
 
-const bookController = new BookController(app);
-const borrowingController = new BorrowingHistoryController(app);
-bookController.registerRoutes();
-borrowingController.registerRoutes();
+const someFeatureController = new SomeFeatureController(app);
+someFeatureController.registerRoutes();
 
 initializeAssociation(app.locals.models);
 
