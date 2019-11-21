@@ -1,5 +1,7 @@
 /* eslint no-console: 0 */
-import ReadlineSync from 'readline-sync';
+import Server from './src/Server';
+import app from './src/app';
+import config from './config/index';
 
-const input = ReadlineSync.question('Input:');
-console.log(input);
+const server = new Server(app, config);
+server.start();
