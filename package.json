@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "<add-project-description-here>",
   "scripts": {
-    "test": "jest --coverage --runInBand --forcnpmeExit",
+    "test": "jest --coverage --runInBand --forceExit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "babel-node index.js"
