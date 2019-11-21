@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "<add-project-description-here>",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --coverage --runInBand --forceExit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "babel-node index.js"
@@ -30,6 +30,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "http-error": "0.0.6",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
     "readline-sync": "^1.4.10",
