@@ -9,7 +9,7 @@ export default class SomeFeatureService {
 
   async borrowBook(someParameter) {
     const { SomeFeature } = this._models;
-    const foundedFeature = SomeFeature.checkExist(someParameter);
+    const foundedFeature = await SomeFeature.checkExist(someParameter);
     return foundedFeature;
   }
 }
