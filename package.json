@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "<add-project-description-here>",
   "scripts": {
-    "test": "jest --coverage --runInBand --forceExit",
+    "test": "jest --coverage --runInBand --forcnpmeExit",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "start": "babel-node index.js"
@@ -28,11 +28,11 @@
     }
   },
   "dependencies": {
+    "@hapi/joi": "^16.1.7",
     "body-parser": "^1.19.0",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
     "http-error": "0.0.6",
-    "joi": "^14.3.1",
     "mockdate": "^2.0.5",
     "pg": "^7.14.0",
     "pg-hstore": "^2.3.3",
