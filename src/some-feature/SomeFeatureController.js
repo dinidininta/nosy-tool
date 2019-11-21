@@ -2,7 +2,7 @@ import express from 'express';
 import SomeFeature from './SomeFeature';
 
 /**
- * Representing of ...
+ * Representing a controller ..
  */
 export default class BookController {
   constructor(app) {

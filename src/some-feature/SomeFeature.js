@@ -26,11 +26,15 @@ class SomeFeature extends Model {
   static associate(models) {
     const {
       model: someModel
-
     } = models;
 
     someModel.belongsTo(someModel, { foreignKey: 'id' });
   }
+
+  static checkExist(someFeatureId) {
+    return SomeFeature.findOne({ where: { id: someFeatureId } });
+  }
+
 }
 
 export default SomeFeature;
