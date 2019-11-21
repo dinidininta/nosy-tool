@@ -1,32 +1,23 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import database from './Database';
-import config from '../config/config';
-import BookController from '../src/book/BookController';
-import Book from './book/Book';
-import Author from './author/Author';
-import Customer from './customer/Customer';
-import BorrowingHistory from './borrowing-history/BorrowingHistory';
-import BorrowingHistoryController from './borrowing-history/BorrowingHistoryController';
+import config from '../config/index';
+import SomeFeature from './some-feature/SomeFeature';
+import SomeFeatureController from './some-feature/SomeFeatureController';
 
 const app = express();
 const db = database.connect(config.db);
 
 const createModels = () => ({
-  Book: Book.init(db),
-  Author: Author.init(db),
-  Customer: Customer.init(db),
-  BorrowingHistory: BorrowingHistory.init(db)
+  Feature: SomeFeature.init(db),
 });
 
 const initializeAssociation = (models) => {
-  models.Book.associate(models);
-  models.Author.associate(models);
-  models.Customer.associate(models);
+  models.SomeFeature.associate(models);
 };
 
 const createControllers = () => [
-  new BookController(app)
+  new SomeFeatureController(app)
 ];
 
 const initializeControllers = () => {

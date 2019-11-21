@@ -22,6 +22,15 @@ class SomeFeature extends Model {
       tableName: 'some-feature'
     });
   }
+
+  static associate(models) {
+    const {
+      model: someModel
+
+    } = models;
+
+    someModel.belongsTo(someModel, { foreignKey: 'id' });
+  }
 }
 
 export default SomeFeature;
