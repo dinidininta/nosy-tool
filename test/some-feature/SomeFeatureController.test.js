@@ -19,11 +19,11 @@ const _doingSomething = async () => {
 describe('SomeFeatureController', () => {
   beforeEach(_destroyDatabase);
 
+  afterEach(_doingSomething);
+
   describe('GET /feature...', () => {
     const feature = _initializeData();
 
     expect(feature).toEqual(feature);
   });
-
-  afterEach(_doingSomething);
 });
