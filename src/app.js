@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import database from './Database';
 import config from '../config/index';
 import SomeFeature from './some-feature/SomeFeature';
+import SomeFeatureService from './some-feature/SomeFeatureService';
 import SomeFeatureController from './some-feature/SomeFeatureController';
 
 const app = express();
@@ -10,6 +11,10 @@ const db = database.connect(config.db);
 
 const createModels = () => ({
   Feature: SomeFeature.init(db)
+});
+
+const createServices = (models) => ({
+  someFeatureService: new SomeFeatureService(models)
 });
 
 const initializeAssociation = (models) => {
@@ -29,21 +34,13 @@ const initializeControllers = () => {
 
 const registerDependencies = () => {
   app.locals.models = createModels();
-};
-const registerServices = (models) => {
-  app.locals.services = createModels(models);
+  app.locals.services = createServices(models);
 };
 
 registerDependencies();
-registerServices(app.locals.models);
 
 app.use(bodyParser.json());
 initializeControllers();
-
-app.locals.models = createModels();
-
-const someFeatureController = new SomeFeatureController(app);
-someFeatureController.registerRoutes();
 
 initializeAssociation(app.locals.models);
 
