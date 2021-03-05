@@ -36,3 +36,6 @@ Icon*
 
 # Environment variables
 .env
+
+# package-lock
+package-lock.json
