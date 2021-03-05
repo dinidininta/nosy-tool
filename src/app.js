@@ -1,28 +1,24 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import database from './Database';
-import config from '../config/index';
-import SomeFeature from './some-feature/SomeFeature';
-import SomeFeatureService from './some-feature/SomeFeatureService';
-import SomeFeatureController from './some-feature/SomeFeatureController';
+import InstagramService from './instagram/InstagramService';
+import InstagramController from './instagram/InstagramController';
 
 const app = express();
-const db = database.connect(config.db);
+// const db = database.connect(config.db);
 
 const createModels = () => ({
-  Feature: SomeFeature.init(db)
 });
 
 const createServices = models => ({
-  someFeatureService: new SomeFeatureService(models)
+  instagramService: new InstagramService(models)
 });
 
-const initializeAssociation = (models) => {
-  models.SomeFeature.associate(models);
-};
+// const initializeAssociation = (models) => {
+//   models.SomeFeature.associate(models);
+// };
 
 const createControllers = () => [
-  new SomeFeatureController(app)
+  new InstagramController(app)
 ];
 
 const initializeControllers = () => {
@@ -42,6 +38,6 @@ registerDependencies();
 app.use(bodyParser.json());
 initializeControllers();
 
-initializeAssociation(app.locals.models);
+// initializeAssociation(app.locals.models);
 
 export default app;
