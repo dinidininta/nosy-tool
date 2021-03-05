@@ -39,3 +39,6 @@ Icon*
 
 # package-lock
 package-lock.json
+
+# testapi file
+testapi.js
