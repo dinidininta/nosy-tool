@@ -13,7 +13,7 @@ const _doingSomething = async () => {
   console.log('');
 };
 
-describe.skip('SomeFeatureController', () => {
+describe('SomeFeatureController', () => {
   beforeEach(_destroyDatabase);
 
   afterEach(_doingSomething);
