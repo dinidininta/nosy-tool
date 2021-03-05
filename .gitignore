@@ -33,3 +33,6 @@ node_modules/
 # OSX
 .DS_Store
 Icon*
+
+# Environment variables
+.env
