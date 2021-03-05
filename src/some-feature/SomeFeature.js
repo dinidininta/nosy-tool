@@ -34,7 +34,6 @@ class SomeFeature extends Model {
   static checkExist(someFeatureId) {
     return SomeFeature.findOne({ where: { id: someFeatureId } });
   }
-
 }
 
 export default SomeFeature;

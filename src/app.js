@@ -13,7 +13,7 @@ const createModels = () => ({
   Feature: SomeFeature.init(db)
 });
 
-const createServices = (models) => ({
+const createServices = models => ({
   someFeatureService: new SomeFeatureService(models)
 });
 
@@ -34,7 +34,7 @@ const initializeControllers = () => {
 
 const registerDependencies = () => {
   app.locals.models = createModels();
-  app.locals.services = createServices(models);
+  app.locals.services = createServices(app.locals.models);
 };
 
 registerDependencies();
