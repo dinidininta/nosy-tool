@@ -1,7 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import Instagram from 'instagram-web-api';
 import InstagramService from './instagram/InstagramService';
 import InstagramController from './instagram/InstagramController';
+
+const { IG_USERNAME, IG_PASSWORD } = process.env;
 
 const app = express();
 // const db = database.connect(config.db);
@@ -9,8 +12,8 @@ const app = express();
 const createModels = () => ({
 });
 
-const createServices = models => ({
-  instagramService: new InstagramService(models)
+const createServices = locals => ({
+  instagramService: new InstagramService(locals)
 });
 
 // const initializeAssociation = (models) => {
@@ -29,11 +32,15 @@ const initializeControllers = () => {
 };
 
 const registerDependencies = () => {
+  console.log('registering dependencies...');
   app.locals.models = createModels();
-  app.locals.services = createServices(app.locals.models);
+  app.locals.client = new Instagram({ username: IG_USERNAME, password: IG_PASSWORD });
+  app.locals.services = createServices(app.locals);
 };
 
 registerDependencies();
+
+app.locals.client.login().then((res) => { console.log(res); });
 
 app.use(bodyParser.json());
 initializeControllers();

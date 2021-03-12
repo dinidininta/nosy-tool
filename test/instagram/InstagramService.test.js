@@ -1,20 +1,17 @@
 import InstagramService from '../../src/instagram/InstagramService';
-
-const mockLogin = jest.fn();
-const mockGetProfile = jest.fn();
-
-jest.mock('instagram-web-api', () => jest.fn().mockImplementation(() => ({
-  login: mockLogin,
-  getProfile: mockGetProfile
-})));
+import WrongCredentialError from '../../src/error/WrongCredentialError';
 
 describe('InstagramService', () => {
   let service;
   let expectedResult;
   let actualResult;
+  let client;
   beforeEach(() => {
-    mockLogin.mockResolvedValue({ authenticated: true });
-    service = new InstagramService();
+    client = {
+      login: jest.fn(),
+      getProfile: jest.fn()
+    };
+    service = new InstagramService({ client });
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -25,20 +22,23 @@ describe('InstagramService', () => {
         userId: 1
       };
 
-      mockGetProfile.mockResolvedValue(expectedResult);
+      client.getProfile.mockResolvedValue(expectedResult);
       actualResult = await service.getProfile();
 
       expect(actualResult).toEqual(expectedResult);
     });
-    it('should return message Username atau Password salah when authenticated is false', async () => {
-      expectedResult = {
-        message: 'Username atau Password salah'
-      };
-      mockLogin.mockResolvedValue({ authenticated: false });
+    it.skip('should throw error Username atau Password salah when authenticated is false', async () => {
+      const expectedError = new WrongCredentialError();
+      client.login.mockResolvedValue({ authenticated: false });
 
-      actualResult = await service.getProfile();
+      actualResult = () => service.getProfile();
 
-      expect(actualResult).toEqual(expectedResult);
+      await expect(actualResult()).rejects.toThrowError(expectedError);
+    });
+  });
+  describe('#getUserByUsername', () => {
+    it('should return user data when there is username input', () => {
+
     });
   });
 });
