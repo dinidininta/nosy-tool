@@ -9,7 +9,8 @@ describe('InstagramService', () => {
   beforeEach(() => {
     client = {
       login: jest.fn(),
-      getProfile: jest.fn()
+      getProfile: jest.fn(),
+      getUserByUsername: jest.fn()
     };
     service = new InstagramService({ client });
   });
@@ -37,8 +38,14 @@ describe('InstagramService', () => {
     });
   });
   describe('#getUserByUsername', () => {
-    it('should return user data when there is username input', () => {
+    let username;
+    it('should return user data when there is username input', async () => {
+      username = 'user1';
+      client.getUserByUsername.mockResolvedValue(username);
 
+      actualResult = await service.getUserByUsername(username);
+
+      expect(actualResult).toEqual(username);
     });
   });
 });

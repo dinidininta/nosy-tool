@@ -7,4 +7,9 @@ export default class InstagramService {
   async getProfile() {
     return this._client.getProfile();
   }
+
+  async getUserByUsername(data) {
+    const { username } = data;
+    return this._client.getUserByUsername({ username });
+  }
 }
