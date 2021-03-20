@@ -20,13 +20,13 @@ export default class InstagramController {
   async _getProfile(req, res) {
     const { instagramService } = this._app.locals.services;
     const result = await instagramService.getProfile();
-    return res.status(200).json(result);
+    return res.status(200).json({ success: true, result });
   }
 
   async _getUserByUsername(req, res) {
     const { instagramService } = this._app.locals.services;
     const result = await instagramService.getUserByUsername(req.params);
-    return res.status(200).json(result);
+    return res.status(200).json({ success: true, result });
   }
 
   async _getAllFollowingsOfUser(req, res) {
@@ -35,6 +35,6 @@ export default class InstagramController {
     const { instagramService } = this._app.locals.services;
     const { id: userId } = await instagramService.getUserByUsername(req.params);
     await instagramService.collectFollowingsNames(userId, verifiedAccOnly, result);
-    return res.status(200).json(result);
+    return res.status(200).json({ success: true, result });
   }
 }
