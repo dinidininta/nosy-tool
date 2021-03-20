@@ -19,7 +19,7 @@ export default class InstagramService {
       return user;
     } catch (error) {
       const item = `Username ${username}`;
-      const action = `Finding ${item}`;
+      const action = `finding ${item}`;
       await this._handleError(error, action, item);
     }
   }
@@ -52,6 +52,9 @@ export default class InstagramService {
         sleep(3000);
         await this.collectFollowingsNames(userId, option, names, fetchedEndCursor);
       }
+      if (!hasNextPage) {
+        console.log(`finished ${action}`);
+      }
     } catch (error) {
       await this._handleError(error, action);
     }
@@ -77,6 +80,7 @@ export default class InstagramService {
       return tempMutuals;
     }, mutuals);
 
+    console.log(`finished finding mutuals between ${firstUser} and ${secondUser}`);
     return mutuals;
   }
 }

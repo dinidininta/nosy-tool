@@ -40,6 +40,7 @@ const registerDependencies = () => {
 
 registerDependencies();
 
+console.log('logging in...');
 app.locals.client.login().then((res) => { console.log(res); });
 
 app.use(bodyParser.json());
