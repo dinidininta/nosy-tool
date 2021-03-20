@@ -110,4 +110,67 @@ describe('InstagramService', () => {
       expect(client.updateChallenge).toHaveBeenCalledWith(expectedResult);
     });
   });
+  describe('#findMutuals', () => {
+    it('should return mutuals between two users', async () => {
+      expectedResult = ['rosie', 'lisa'];
+
+      const verifiedAccOnly = true;
+      const firstUser = 'jisoo';
+      const firstUserFollowing = {
+        page_info: {
+          has_next_page: false,
+          end_cursor: null
+        },
+        data: [
+          {
+            is_verified: true,
+            username: 'rosie'
+          },
+          {
+            is_verified: true,
+            username: 'lisa'
+          },
+          {
+            is_verified: false,
+            username: 'wendy'
+          }
+        ]
+      };
+      client.getUserByUsername.mockResolvedValueOnce({ id: 1 });
+      client.getFollowings.mockResolvedValueOnce(firstUserFollowing);
+
+      const secondUser = 'jennie';
+      const secondUserFollowing = {
+        page_info: {
+          has_next_page: false,
+          end_cursor: null
+        },
+        data: [
+          {
+            is_verified: true,
+            username: 'rosie'
+          },
+          {
+            is_verified: true,
+            username: 'lisa'
+          },
+          {
+            is_verified: false,
+            username: 'wendy'
+          },
+          {
+            is_verified: true,
+            username: 'yeri'
+          }
+        ]
+      };
+      client.getUserByUsername.mockResolvedValueOnce({ id: 2 });
+      client.getFollowings.mockResolvedValueOnce(secondUserFollowing);
+      jest.runAllTimers();
+
+      actualResult = await service.findMutuals(firstUser, secondUser, verifiedAccOnly);
+
+      expect(actualResult).toEqual(expectedResult);
+    });
+  });
 });

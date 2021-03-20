@@ -43,4 +43,27 @@ export default class InstagramService {
       await this._handleError(error, action);
     }
   }
+
+  async findMutuals(firstUser, secondUser, verifiedAccOnly = false) {
+    const mutuals = [];
+    const { id: firstId } = await this.getUserByUsername({ username: firstUser });
+    const { id: secondId } = await this.getUserByUsername({ username: secondUser });
+
+    const firstUserFollowing = [];
+    await this.collectFollowingsNames(firstId, verifiedAccOnly, firstUserFollowing);
+
+    sleep(5000);
+
+    const secondUserFollowing = [];
+    await this.collectFollowingsNames(secondId, verifiedAccOnly, secondUserFollowing);
+
+    firstUserFollowing.reduce((tempMutuals, currentFollowing) => {
+      if (secondUserFollowing.includes(currentFollowing)) {
+        tempMutuals.push(currentFollowing);
+      }
+      return tempMutuals;
+    }, mutuals);
+
+    return mutuals;
+  }
 }
