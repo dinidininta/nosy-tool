@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import InstagramService from '../../src/instagram/InstagramService';
+import NotFoundError from '../../src/error/NotFoundError';
 
 describe('InstagramService', () => {
   let service;
@@ -39,9 +40,21 @@ describe('InstagramService', () => {
       username = 'user1';
       client.getUserByUsername.mockResolvedValue(username);
 
-      actualResult = await service.getUserByUsername(username);
+      actualResult = await service.getUserByUsername({ username });
 
       expect(actualResult).toEqual(username);
+    });
+    it('should throw error when username is not found', async () => {
+      username = 'user1';
+      const item = `Username ${username}`;
+      const error = { statusCode: 404 };
+      const expectedError = new NotFoundError(item);
+
+      client.getUserByUsername.mockRejectedValue(error);
+
+      actualResult = () => service.getUserByUsername({ username });
+
+      await expect(actualResult()).rejects.toThrow(expectedError);
     });
   });
   describe('#collectFollowingsNames', () => {

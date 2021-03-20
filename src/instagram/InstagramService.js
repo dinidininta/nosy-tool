@@ -1,4 +1,5 @@
 import { sleep, pushIntoArray, getOption } from '../tools/ServerTool';
+import NotFoundError from '../error/NotFoundError';
 
 export default class InstagramService {
   constructor(locals) {
@@ -10,21 +11,32 @@ export default class InstagramService {
     return this._client.getProfile();
   }
 
+  // eslint-disable-next-line consistent-return
   async getUserByUsername(data) {
     const { username } = data;
-    return this._client.getUserByUsername({ username });
+    try {
+      const user = await this._client.getUserByUsername({ username });
+      return user;
+    } catch (error) {
+      const item = `Username ${username}`;
+      const action = `Finding ${item}`;
+      await this._handleError(error, action, item);
+    }
   }
 
   async _getFollowings(userId, after = null) {
     return this._client.getFollowings({ userId, after });
   }
 
-  async _handleError(error, action) {
+  async _handleError(error, action, item = '') {
     const { error: errorBody } = error;
     console.log(`error when ${action}. error: ${JSON.stringify(errorBody)}`);
     if (errorBody && errorBody.message === 'checkpoint_required' && errorBody.checkpoint_url) {
       const challengeUrl = errorBody.checkpoint_url;
       await this._client.updateChallenge({ challengeUrl, choice: 1 });
+    }
+    if (error.statusCode === 404) {
+      throw new NotFoundError(item);
     }
   }
 
