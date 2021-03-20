@@ -33,17 +33,17 @@ export default class InstagramController {
 
   async _getAllFollowingsOfUser(req, res) {
     const result = [];
-    const { verifiedAccOnly } = req.body;
+    const { option } = req.body;
     const { instagramService } = this._app.locals.services;
     const { id: userId } = await instagramService.getUserByUsername(req.params);
-    await instagramService.collectFollowingsNames(userId, verifiedAccOnly, result);
+    await instagramService.collectFollowingsNames(userId, option, result);
     return res.status(200).json({ success: true, result });
   }
 
   async _findMutualsOfTwoUsers(req, res) {
-    const { firstUser, secondUser, verifiedAccOnly } = req.body;
+    const { firstUser, secondUser, option } = req.body;
     const { instagramService } = this._app.locals.services;
-    const result = await instagramService.findMutuals(firstUser, secondUser, verifiedAccOnly);
+    const result = await instagramService.findMutuals(firstUser, secondUser, option);
     return res.status(200).json({ success: true, result });
   }
 }
