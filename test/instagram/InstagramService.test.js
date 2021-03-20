@@ -45,49 +45,76 @@ describe('InstagramService', () => {
     });
   });
   describe('#collectFollowingsNames', () => {
+    let option;
     const userId = 1;
-    const verifiedAccOnly = false;
-    it('should return all followings of a user', async () => {
+    const firstFollowing = {
+      page_info: {
+        has_next_page: true,
+        end_cursor: 'asdaadada'
+      },
+      data: [
+        {
+          is_verified: true,
+          username: 'user2'
+        },
+        {
+          is_verified: false,
+          username: 'user3'
+        }
+      ]
+    };
+    const secondFollowing = {
+      page_info: {
+        has_next_page: false,
+        end_cursor: null
+      },
+      data: [
+        {
+          is_verified: true,
+          username: 'user4'
+        },
+        {
+          is_verified: false,
+          username: 'user5'
+        }
+      ]
+    };
+    it('should return all followings of a user when the option is 2 (all accounts)', async () => {
       expectedResult = ['user2', 'user3', 'user4', 'user5'];
       actualResult = [];
 
-      const firstFollowing = {
-        page_info: {
-          has_next_page: true,
-          end_cursor: 'asdaadada'
-        },
-        data: [
-          {
-            is_verified: true,
-            username: 'user2'
-          },
-          {
-            is_verified: false,
-            username: 'user3'
-          }
-        ]
-      };
       client.getFollowings.mockResolvedValueOnce(firstFollowing);
-      const secondFollowing = {
-        page_info: {
-          has_next_page: false,
-          end_cursor: null
-        },
-        data: [
-          {
-            is_verified: true,
-            username: 'user4'
-          },
-          {
-            is_verified: false,
-            username: 'user5'
-          }
-        ]
-      };
       client.getFollowings.mockResolvedValueOnce(secondFollowing);
+      option = 2;
       jest.runAllTimers();
 
-      await service.collectFollowingsNames(userId, verifiedAccOnly, actualResult);
+      await service.collectFollowingsNames(userId, option, actualResult);
+
+      expect(actualResult).toEqual(expectedResult);
+    });
+    it('should return only verified followings of a user when the option is 0 (verified only)', async () => {
+      expectedResult = ['user2', 'user4'];
+      actualResult = [];
+
+      client.getFollowings.mockResolvedValueOnce(firstFollowing);
+      client.getFollowings.mockResolvedValueOnce(secondFollowing);
+      option = 0;
+      jest.runAllTimers();
+
+      await service.collectFollowingsNames(userId, option, actualResult);
+
+      expect(actualResult).toEqual(expectedResult);
+    });
+    it('should return only non verified followings of a user when the option is 1 (non verified only)', async () => {
+      expectedResult = ['user3', 'user5'];
+      actualResult = [];
+
+      client.getFollowings.mockResolvedValueOnce(firstFollowing);
+      client.getFollowings.mockResolvedValueOnce(secondFollowing);
+      option = 1;
+      jest.runAllTimers();
+
+      await service.collectFollowingsNames(userId, option, actualResult);
 
       expect(actualResult).toEqual(expectedResult);
     });
@@ -103,9 +130,10 @@ describe('InstagramService', () => {
         choice: 1
       };
       client.getFollowings.mockRejectedValue(expectedError);
+      option = 2;
       jest.runAllTimers();
 
-      await service.collectFollowingsNames(userId, verifiedAccOnly, []);
+      await service.collectFollowingsNames(userId, option, []);
 
       expect(client.updateChallenge).toHaveBeenCalledWith(expectedResult);
     });
@@ -133,6 +161,10 @@ describe('InstagramService', () => {
           {
             is_verified: false,
             username: 'wendy'
+          },
+          {
+            is_verified: true,
+            username: 'seulgi'
           }
         ]
       };

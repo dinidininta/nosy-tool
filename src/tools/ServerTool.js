@@ -1,11 +1,18 @@
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const isBoolean = variable => variable === true || variable === false;
+
+const getOption = (option) => {
+  const options = [true, false, null];
+  return options[option];
+};
+
 const pushIntoArray = (sourceArray, targetArray, keyToPush, keyToCheck, targetValue) => {
   sourceArray.forEach((element) => {
-    if (targetValue && element[keyToCheck] === targetValue) {
+    if (isBoolean(targetValue) && element[keyToCheck] === targetValue) {
       targetArray.push(element[keyToPush]);
     }
-    if (!targetValue) {
+    if (targetValue === null) {
       targetArray.push(element[keyToPush]);
     }
   });
@@ -13,5 +20,6 @@ const pushIntoArray = (sourceArray, targetArray, keyToPush, keyToCheck, targetVa
 
 module.exports = {
   sleep,
-  pushIntoArray
+  pushIntoArray,
+  getOption
 };

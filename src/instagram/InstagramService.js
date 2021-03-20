@@ -1,4 +1,4 @@
-import { sleep, pushIntoArray } from '../tools/ServerTool';
+import { sleep, pushIntoArray, getOption } from '../tools/ServerTool';
 
 export default class InstagramService {
   constructor(locals) {
@@ -28,16 +28,17 @@ export default class InstagramService {
     }
   }
 
-  async collectFollowingsNames(userId, verifiedAccOnly, names = [], endCursor = null) {
+  async collectFollowingsNames(userId, option, names = [], endCursor = null) {
     const action = `fetching following of user ${userId}`;
+    const followingFilter = getOption(option);
     try {
       console.log(`${action}...`);
       const { page_info: pageInfo, data } = await this._getFollowings(userId, endCursor);
       const { has_next_page: hasNextPage, end_cursor: fetchedEndCursor } = pageInfo;
-      pushIntoArray(data, names, 'username', 'is_verified', verifiedAccOnly);
+      pushIntoArray(data, names, 'username', 'is_verified', followingFilter);
       if (hasNextPage) {
         sleep(3000);
-        await this.collectFollowingsNames(userId, verifiedAccOnly, names, fetchedEndCursor);
+        await this.collectFollowingsNames(userId, option, names, fetchedEndCursor);
       }
     } catch (error) {
       await this._handleError(error, action);
