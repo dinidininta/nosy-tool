@@ -1,6 +1,5 @@
 /* eslint-disable max-lines-per-function */
 import InstagramService from '../../src/instagram/InstagramService';
-import WrongCredentialError from '../../src/error/WrongCredentialError';
 
 describe('InstagramService', () => {
   let service;
@@ -12,7 +11,8 @@ describe('InstagramService', () => {
       login: jest.fn(),
       getProfile: jest.fn(),
       getUserByUsername: jest.fn(),
-      getFollowings: jest.fn()
+      getFollowings: jest.fn(),
+      updateChallenge: jest.fn()
     };
     service = new InstagramService({ client });
     jest.useFakeTimers();
@@ -32,14 +32,6 @@ describe('InstagramService', () => {
 
       expect(actualResult).toEqual(expectedResult);
     });
-    it.skip('should throw error Username atau Password salah when authenticated is false', async () => {
-      const expectedError = new WrongCredentialError();
-      client.login.mockResolvedValue({ authenticated: false });
-
-      actualResult = () => service.getProfile();
-
-      await expect(actualResult()).rejects.toThrowError(expectedError);
-    });
   });
   describe('#getUserByUsername', () => {
     let username;
@@ -53,12 +45,12 @@ describe('InstagramService', () => {
     });
   });
   describe('#collectFollowingsNames', () => {
+    const userId = 1;
+    const verifiedAccOnly = false;
     it('should return all followings of a user', async () => {
       expectedResult = ['user2', 'user3', 'user4', 'user5'];
       actualResult = [];
 
-      const userId = 1;
-      const verifiedAccOnly = false;
       const firstFollowing = {
         page_info: {
           has_next_page: true,
@@ -98,6 +90,24 @@ describe('InstagramService', () => {
       await service.collectFollowingsNames(userId, verifiedAccOnly, actualResult);
 
       expect(actualResult).toEqual(expectedResult);
+    });
+    it('should call client.updateChallenge when there is checkpoint error when fetching followings', async () => {
+      const expectedError = {
+        error: {
+          message: 'checkpoint_required',
+          checkpoint_url: 'localhost'
+        }
+      };
+      expectedResult = {
+        challengeUrl: expectedError.error.checkpoint_url,
+        choice: 1
+      };
+      client.getFollowings.mockRejectedValue(expectedError);
+      jest.runAllTimers();
+
+      await service.collectFollowingsNames(userId, verifiedAccOnly, []);
+
+      expect(client.updateChallenge).toHaveBeenCalledWith(expectedResult);
     });
   });
 });
