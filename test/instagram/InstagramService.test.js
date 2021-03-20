@@ -79,21 +79,8 @@ describe('InstagramService', () => {
         }
       ]
     };
-    it('should return all followings of a user when the option is 2 (all accounts)', async () => {
+    it('should return all followings of a user when the option is 0 (all accounts)', async () => {
       expectedResult = ['user2', 'user3', 'user4', 'user5'];
-      actualResult = [];
-
-      client.getFollowings.mockResolvedValueOnce(firstFollowing);
-      client.getFollowings.mockResolvedValueOnce(secondFollowing);
-      option = 2;
-      jest.runAllTimers();
-
-      await service.collectFollowingsNames(userId, option, actualResult);
-
-      expect(actualResult).toEqual(expectedResult);
-    });
-    it('should return only verified followings of a user when the option is 0 (verified only)', async () => {
-      expectedResult = ['user2', 'user4'];
       actualResult = [];
 
       client.getFollowings.mockResolvedValueOnce(firstFollowing);
@@ -105,13 +92,26 @@ describe('InstagramService', () => {
 
       expect(actualResult).toEqual(expectedResult);
     });
-    it('should return only non verified followings of a user when the option is 1 (non verified only)', async () => {
-      expectedResult = ['user3', 'user5'];
+    it('should return only verified followings of a user when the option is 1 (verified only)', async () => {
+      expectedResult = ['user2', 'user4'];
       actualResult = [];
 
       client.getFollowings.mockResolvedValueOnce(firstFollowing);
       client.getFollowings.mockResolvedValueOnce(secondFollowing);
       option = 1;
+      jest.runAllTimers();
+
+      await service.collectFollowingsNames(userId, option, actualResult);
+
+      expect(actualResult).toEqual(expectedResult);
+    });
+    it('should return only non verified followings of a user when the option is 2 (non verified only)', async () => {
+      expectedResult = ['user3', 'user5'];
+      actualResult = [];
+
+      client.getFollowings.mockResolvedValueOnce(firstFollowing);
+      client.getFollowings.mockResolvedValueOnce(secondFollowing);
+      option = 2;
       jest.runAllTimers();
 
       await service.collectFollowingsNames(userId, option, actualResult);
@@ -139,10 +139,10 @@ describe('InstagramService', () => {
     });
   });
   describe('#findMutuals', () => {
-    it('should return mutuals between two users', async () => {
+    it('should return all verified mutuals between two users', async () => {
       expectedResult = ['rosie', 'lisa'];
 
-      const option = 0;
+      const option = 1;
       const firstUser = 'jisoo';
       const firstUserFollowing = {
         page_info: {

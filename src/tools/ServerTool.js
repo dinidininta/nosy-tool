@@ -3,7 +3,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const isBoolean = variable => variable === true || variable === false;
 
 const getOption = (option) => {
-  const options = [true, false, null];
+  const options = [null, true, false];
   return options[option];
 };
 
