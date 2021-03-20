@@ -142,7 +142,7 @@ describe('InstagramService', () => {
     it('should return mutuals between two users', async () => {
       expectedResult = ['rosie', 'lisa'];
 
-      const verifiedAccOnly = true;
+      const option = 0;
       const firstUser = 'jisoo';
       const firstUserFollowing = {
         page_info: {
@@ -200,7 +200,7 @@ describe('InstagramService', () => {
       client.getFollowings.mockResolvedValueOnce(secondUserFollowing);
       jest.runAllTimers();
 
-      actualResult = await service.findMutuals(firstUser, secondUser, verifiedAccOnly);
+      actualResult = await service.findMutuals(firstUser, secondUser, option);
 
       expect(actualResult).toEqual(expectedResult);
     });

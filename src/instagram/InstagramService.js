@@ -45,18 +45,18 @@ export default class InstagramService {
     }
   }
 
-  async findMutuals(firstUser, secondUser, verifiedAccOnly = false) {
+  async findMutuals(firstUser, secondUser, option = 2) {
     const mutuals = [];
     const { id: firstId } = await this.getUserByUsername({ username: firstUser });
     const { id: secondId } = await this.getUserByUsername({ username: secondUser });
 
     const firstUserFollowing = [];
-    await this.collectFollowingsNames(firstId, verifiedAccOnly, firstUserFollowing);
+    await this.collectFollowingsNames(firstId, option, firstUserFollowing);
 
     sleep(5000);
 
     const secondUserFollowing = [];
-    await this.collectFollowingsNames(secondId, verifiedAccOnly, secondUserFollowing);
+    await this.collectFollowingsNames(secondId, option, secondUserFollowing);
 
     firstUserFollowing.reduce((tempMutuals, currentFollowing) => {
       if (secondUserFollowing.includes(currentFollowing)) {
