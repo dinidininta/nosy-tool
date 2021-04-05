@@ -29,14 +29,14 @@ export default class InstagramService {
   }
 
   async _handleError(error, action, item = '') {
+    if (error.statusCode === 404) {
+      throw new NotFoundError(item);
+    }
     const { error: errorBody } = error;
     console.log(`error when ${action}. error: ${JSON.stringify(errorBody)}`);
     if (errorBody && errorBody.message === 'checkpoint_required' && errorBody.checkpoint_url) {
       const challengeUrl = errorBody.checkpoint_url;
       await this._client.updateChallenge({ challengeUrl, choice: 1 });
-    }
-    if (error.statusCode === 404) {
-      throw new NotFoundError(item);
     }
   }
 
