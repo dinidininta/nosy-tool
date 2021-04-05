@@ -38,7 +38,7 @@ Icon*
 .env
 
 # package-lock
-# package-lock.json
+package-lock.json
 
 # testapi file
 testapi.js
