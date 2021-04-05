@@ -1,28 +1,29 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import database from './Database';
-import config from '../config/index';
-import SomeFeature from './some-feature/SomeFeature';
-import SomeFeatureService from './some-feature/SomeFeatureService';
-import SomeFeatureController from './some-feature/SomeFeatureController';
+import cors from 'cors';
+import Instagram from 'instagram-web-api';
+import InstagramService from './instagram/InstagramService';
+import InstagramController from './instagram/InstagramController';
+import errorMiddleware from './middleware/errorMiddleware';
+
+const { IG_USERNAME, IG_PASSWORD } = process.env;
 
 const app = express();
-const db = database.connect(config.db);
+// const db = database.connect(config.db);
 
 const createModels = () => ({
-  Feature: SomeFeature.init(db)
 });
 
-const createServices = models => ({
-  someFeatureService: new SomeFeatureService(models)
+const createServices = locals => ({
+  instagramService: new InstagramService(locals)
 });
 
-const initializeAssociation = (models) => {
-  models.SomeFeature.associate(models);
-};
+// const initializeAssociation = (models) => {
+//   models.SomeFeature.associate(models);
+// };
 
 const createControllers = () => [
-  new SomeFeatureController(app)
+  new InstagramController(app)
 ];
 
 const initializeControllers = () => {
@@ -33,15 +34,25 @@ const initializeControllers = () => {
 };
 
 const registerDependencies = () => {
+  console.log('registering dependencies...');
   app.locals.models = createModels();
-  app.locals.services = createServices(app.locals.models);
+  app.locals.client = new Instagram({ username: IG_USERNAME, password: IG_PASSWORD });
+  app.locals.services = createServices(app.locals);
 };
 
 registerDependencies();
 
+console.log('logging in...');
+app.locals.client.login()
+  .then((res) => { console.log(res); })
+  .catch((error) => { console.log(error); });
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 initializeControllers();
 
-initializeAssociation(app.locals.models);
+// initializeAssociation(app.locals.models);
+app.use(errorMiddleware);
 
 export default app;
