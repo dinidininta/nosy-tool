@@ -1,4 +1,5 @@
 import express from 'express';
+import handleError from '../middleware/handleError';
 
 
 export default class InstagramController {
@@ -14,7 +15,7 @@ export default class InstagramController {
   registerRoutes() {
     this._app.use('/instagram', this._router);
     this._router.get('/profile', this._getProfile);
-    this._router.get('/user/:username', this._getUserByUsername);
+    this._router.get('/user/:username', handleError(this._getUserByUsername));
     this._router.post('/user/:username/followings', this._getAllFollowingsOfUser);
     this._router.post('/mutuals', this._findMutualsOfTwoUsers);
   }
