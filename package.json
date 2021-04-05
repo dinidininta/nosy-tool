@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-tdd-template",
+  "name": "nosy-tool",
   "version": "1.0.0",
-  "description": "<add-project-description-here>",
+  "description": "A tool to find mutuals between multiple Instagram users.",
   "scripts": {
     "test": "jest --coverage --runInBand --forceExit",
     "lint": "eslint .",
