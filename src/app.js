@@ -43,7 +43,9 @@ const registerDependencies = () => {
 registerDependencies();
 
 console.log('logging in...');
-app.locals.client.login().then((res) => { console.log(res); });
+app.locals.client.login()
+  .then((res) => { console.log(res); })
+  .catch((error) => { console.log(error); });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
