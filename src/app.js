@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import Instagram from 'instagram-web-api';
 import InstagramService from './instagram/InstagramService';
 import InstagramController from './instagram/InstagramController';
@@ -45,6 +46,8 @@ console.log('logging in...');
 app.locals.client.login().then((res) => { console.log(res); });
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 initializeControllers();
 
 // initializeAssociation(app.locals.models);
