@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import Instagram from 'instagram-web-api';
 import InstagramService from './instagram/InstagramService';
 import InstagramController from './instagram/InstagramController';
+import errorMiddleware from './middleware/errorMiddleware';
 
 const { IG_USERNAME, IG_PASSWORD } = process.env;
 
@@ -47,5 +48,6 @@ app.use(bodyParser.json());
 initializeControllers();
 
 // initializeAssociation(app.locals.models);
+app.use(errorMiddleware);
 
 export default app;
